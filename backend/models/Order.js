@@ -39,23 +39,15 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     required: true,
   },
-  inProgress: {
-    type: Boolean,
-    default: false,
-  },
-  productionStatus: {
+  orderStatus: {
     type: String,
-    enum: ["Not Started", "In Progress", "Completed"],
-    default: "Not Started",
-  },
-  delivered: {
-    type: Boolean,
-    default: false,
+    enum: ["pending", "accepted", "out_for_delivery", "delivered"],
+    default: "pending",
   },
   paymentStatus: {
     type: String,
-    enum: ["Pending", "Completed", "Failed"],
-    default: "Pending",
+    enum: ["pending", "initiated", "completed", "received_by_seller"],
+    default: "pending",
   },
   createdAt: {
     type: Date,

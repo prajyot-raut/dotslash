@@ -17,9 +17,9 @@ router.get("/", isAuthenticated, async (req, res) => {
 
 router.post("/", isAuthenticated, async (req, res) => {
   try {
+    console.log(req.body);
     const {
       transaction,
-      from,
       to,
       productName,
       quantity,
@@ -27,15 +27,11 @@ router.post("/", isAuthenticated, async (req, res) => {
       estimatedDeliveryDate,
       extraInfo,
       deadline,
-      inProgress,
-      productionStatus,
-      delivered,
-      paymentStatus,
     } = req.body;
 
     const order = new Order({
       transaction,
-      from,
+      from: req.user._id,
       to,
       productName,
       quantity,
@@ -43,16 +39,14 @@ router.post("/", isAuthenticated, async (req, res) => {
       estimatedDeliveryDate,
       extraInfo,
       deadline,
-      inProgress,
-      productionStatus,
-      delivered,
-      paymentStatus,
     });
 
     await order.save();
 
     // Append the order to the user's orders array
-    await User.findByIdAndUpdate(from, { $push: { orders: order._id } });
+    await User.findByIdAndUpdate(req.user._id, {
+      $push: { orders: order._id },
+    });
 
     res.status(201).json(order);
   } catch (error) {
@@ -61,28 +55,51 @@ router.post("/", isAuthenticated, async (req, res) => {
 });
 
 router.put("/:id", isAuthenticated, async (req, res) => {
-  try {
-    /*
-      Update types:
-      - order accepted
-      - order out for delivery
-      - order delivered
-      - payment initiated
-      - payment completed
-      - payment received by seller
-    */
-    const { id } = req.params;
-    const order = await Order.findById(id);
+  const { updateType } = req.body;
+  const validUpdateTypes = [
+    "order_accepted",
+    "order_out_for_delivery",
+    "order_delivered",
+    "payment_initiated",
+    "payment_completed",
+    "payment_received_by_seller",
+  ];
 
+  if (!validUpdateTypes.includes(updateType)) {
+    return res.status(400).json({ message: "Invalid update type" });
+  }
+
+  try {
+    const order = await Order.findById(req.params.id);
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
 
-    if (order.from.toString() !== req.user._id) {
-      return res.status(403).json({ message: "Forbidden" });
+    switch (updateType) {
+      case "order_accepted":
+        order.orderStatus = "accepted";
+        break;
+      case "order_out_for_delivery":
+        order.orderStatus = "out_for_delivery";
+        break;
+      case "order_delivered":
+        order.orderStatus = "delivered";
+        break;
+      case "payment_initiated":
+        order.paymentStatus = "initiated";
+        break;
+      case "payment_completed":
+        order.paymentStatus = "completed";
+        break;
+      case "payment_received_by_seller":
+        order.paymentStatus = "received_by_seller";
+        break;
+      default:
+        return res.status(400).json({ message: "Invalid update type" });
     }
 
-    await Order.findByIdAndUpdate(id);
+    await order.save();
+    res.json(order);
   } catch (error) {
     res.status(500).json({ message: "Error updating order" });
   }
