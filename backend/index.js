@@ -2,13 +2,12 @@ const express = require("express");
 const mongoose = require("mongoose");
 const session = require("express-session");
 const passport = require("passport");
-require("./config/passport"); // Load passport configuration
+require("./config/passport");
 const app = express();
 const Auth = require("./routes/auth");
 const Profile = require("./routes/profile");
-const Transactions = require("./routes/transactions"); // Corrected import
+const Transactions = require("./routes/transactions");
 
-// Connect to MongoDB
 mongoose
   .connect("mongodb://localhost:27017/fxp", {
     useNewUrlParser: true,
@@ -17,7 +16,6 @@ mongoose
   .then(() => console.log("MongoDB connected"))
   .catch((error) => console.log(error));
 
-// Middleware
 app.use(express.json());
 app.use(
   session({
@@ -31,7 +29,7 @@ app.use(passport.session());
 
 app.use("/auth", Auth);
 app.use("/profile", Profile);
-app.use("/transactions", Transactions); // Corrected path
+app.use("/transactions", Transactions);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
