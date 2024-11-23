@@ -17,8 +17,9 @@ router.get("/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/", isAuthenticated, async (req, res) => {
+router.post("/:serviceID", isAuthenticated, async (req, res) => {
   try {
+    const { serviceID } = req.params;
     const {
       transaction,
       from,
@@ -29,10 +30,9 @@ router.post("/", isAuthenticated, async (req, res) => {
       extraInfo,
       deadline,
       orderStatus,
-      serviceRef,
     } = req.body;
 
-    const service = await Service.findById(serviceRef);
+    const service = await Service.findById(serviceID);
     if (!service) {
       return res.status(404).json({ message: "Service not found" });
     }
@@ -49,7 +49,7 @@ router.post("/", isAuthenticated, async (req, res) => {
       deadline,
       paymentStatus,
       orderStatus,
-      serviceRef,
+      serviceRef: serviceID,
     });
 
     await order.save();

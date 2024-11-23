@@ -4,6 +4,17 @@ const Service = require("../models/Service");
 const User = require("../models/User");
 const { isAuthenticated } = require("../middleware/auth");
 
+router.get("/", isAuthenticated, async (req, res) => {
+  try {
+    const services = await Service.find({}).sort({
+      createdAt: -1,
+    });
+    res.json(services);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching services" });
+  }
+});
+
 router.post("/", isAuthenticated, async (req, res) => {
   try {
     const { name, description } = req.body;
