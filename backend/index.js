@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 
 app.use("/auth", Auth);
 app.use("/profile", Profile);
-app.use("/transactions", Transactions);
+//app.use("/transactions", Transactions);
 app.use("/orders", Orders);
 app.use("/services", Services);
 
