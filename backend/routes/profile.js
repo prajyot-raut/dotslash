@@ -1,14 +1,14 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { isAuthenticated } = require('../middleware/auth');
+const { isAuthenticated } = require("../middleware/auth");
 
-router.get('/', isAuthenticated, (req, res) => {
+router.get("/", isAuthenticated, (req, res) => {
   const { _id, email, name, createdAt } = req.user;
   res.json({
     id: _id,
     email,
     name,
-    createdAt
+    createdAt,
   });
 });
 
