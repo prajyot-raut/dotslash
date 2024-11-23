@@ -3,6 +3,7 @@ const router = express.Router();
 const Order = require("../models/Order");
 const User = require("../models/User");
 const { isAuthenticated } = require("../middleware/auth");
+const mongoose = require("mongoose");
 
 router.get("/", isAuthenticated, async (req, res) => {
   try {
@@ -15,9 +16,9 @@ router.get("/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/", isAuthenticated, async (req, res) => {
+router.post("/:id", isAuthenticated, async (req, res) => {
   try {
-    console.log(req.body);
+    const service_id = req.params.id;
     const {
       transaction,
       to,
@@ -39,6 +40,7 @@ router.post("/", isAuthenticated, async (req, res) => {
       estimatedDeliveryDate,
       extraInfo,
       deadline,
+      serviceRef: mongoose.Types.ObjectId(service_id),
     });
 
     await order.save();

@@ -23,6 +23,22 @@ const userSchema = new mongoose.Schema({
       ref: "Order",
     },
   ],
+  reviews: [
+    {
+      givenBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+      review: {
+        type: String,
+        required: true,
+      },
+      rating: {
+        type: Number,
+        required: true,
+      },
+    },
+  ],
 });
 
 userSchema.pre("save", async function (next) {
