@@ -8,6 +8,7 @@ const Auth = require("./routes/auth");
 const Profile = require("./routes/profile");
 const Transactions = require("./routes/transactions");
 const Orders = require("./routes/orders");
+const Services = require("./routes/services");
 
 mongoose
   .connect("mongodb://localhost:27017/fxp")
@@ -36,6 +37,7 @@ app.use("/auth", Auth);
 app.use("/profile", Profile);
 app.use("/transactions", Transactions);
 app.use("/orders", Orders);
+app.use("/services", Services);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");

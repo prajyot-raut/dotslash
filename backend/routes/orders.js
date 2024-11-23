@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Order = require("../models/Order");
 const User = require("../models/User");
+const Service = require("../models/Service");
 const { isAuthenticated } = require("../middleware/auth");
 const mongoose = require("mongoose");
 
@@ -16,39 +17,45 @@ router.get("/", isAuthenticated, async (req, res) => {
   }
 });
 
-router.post("/:id", isAuthenticated, async (req, res) => {
+router.post("/", isAuthenticated, async (req, res) => {
   try {
-    const service_id = req.params.id;
     const {
       transaction,
-      to,
+      from,
       productName,
       quantity,
       quotedPrice,
       estimatedDeliveryDate,
       extraInfo,
       deadline,
+      orderStatus,
+      serviceRef,
     } = req.body;
+
+    const service = await Service.findById(serviceRef);
+    if (!service) {
+      return res.status(404).json({ message: "Service not found" });
+    }
 
     const order = new Order({
       transaction,
-      from: req.user._id,
-      to,
+      from,
+      to: service.createdBy,
       productName,
       quantity,
       quotedPrice,
       estimatedDeliveryDate,
       extraInfo,
       deadline,
-      serviceRef: mongoose.Types.ObjectId(service_id),
+      paymentStatus,
+      orderStatus,
+      serviceRef,
     });
 
     await order.save();
 
     // Append the order to the user's orders array
-    await User.findByIdAndUpdate(req.user._id, {
-      $push: { orders: order._id },
-    });
+    await User.findByIdAndUpdate(from, { $push: { orders: order._id } });
 
     res.status(201).json(order);
   } catch (error) {

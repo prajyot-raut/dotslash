@@ -39,6 +39,12 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
+  services: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Service",
+    },
+  ],
 });
 
 userSchema.pre("save", async function (next) {
