@@ -4,6 +4,7 @@ import { Column } from "primereact/column";
 import { Toast } from "primereact/toast";
 import { Tag } from "primereact/tag";
 import { ProgressSpinner } from "primereact/progressspinner";
+import { ProgressBar } from "primereact/progressbar";
 import axios from "axios";
 
 const ShowOrders = () => {
@@ -69,6 +70,33 @@ const ShowOrders = () => {
     return new Date(rowData[field]).toLocaleDateString();
   };
 
+  const calculateTimeRemaining = (deadline) => {
+    if (!deadline) return null;
+    const now = new Date();
+    const end = new Date(deadline);
+    const remaining = end - now;
+    return remaining > 0 ? remaining : 0;
+  };
+
+  const timerBodyTemplate = (rowData) => {
+    if (rowData.orderStatus === "delivered" && rowData.disputeDeadline) {
+      const remaining = calculateTimeRemaining(rowData.disputeDeadline);
+      const totalTime = rowData.timers.deliveryTimer * 24 * 60 * 60 * 1000;
+      const progress = ((totalTime - remaining) / totalTime) * 100;
+
+      return (
+        <div className="w-full">
+          <ProgressBar value={progress} />
+          <small className="block mt-1">
+            {Math.ceil(remaining / (1000 * 60 * 60 * 24))} days remaining for
+            dispute
+          </small>
+        </div>
+      );
+    }
+    return null;
+  };
+
   return (
     <div className="card m-4">
       <Toast ref={toast} />
@@ -113,6 +141,11 @@ const ShowOrders = () => {
             header="Payment"
             body={paymentStatusBodyTemplate}
             sortable
+          />
+          <Column
+            field="timer"
+            header="Dispute Timer"
+            body={timerBodyTemplate}
           />
         </DataTable>
       )}

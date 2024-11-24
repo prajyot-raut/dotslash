@@ -3,6 +3,7 @@ import { TabView, TabPanel } from "primereact/tabview";
 import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
+import { Card } from "primereact/card";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
@@ -59,67 +60,69 @@ const AuthPage = ({ setIsAuthenticated }) => {
   };
 
   return (
-    <div className="auth-page">
-      <TabView
-        activeIndex={activeIndex}
-        onTabChange={(e) => setActiveIndex(e.index)}
-      >
-        <TabPanel header="Login">
-          <div className="p-fluid">
-            <div className="p-field">
-              <label htmlFor="loginEmail">Email</label>
-              <InputText
-                id="loginEmail"
-                name="email"
-                value={loginData.email}
-                onChange={handleLoginChange}
-              />
+    <div className="flex align-items-center justify-content-center min-h-screen bg-gray-100">
+      <Card className="w-full md:w-8 lg:w-6 xl:w-4">
+        <TabView
+          activeIndex={activeIndex}
+          onTabChange={(e) => setActiveIndex(e.index)}
+        >
+          <TabPanel header="Login">
+            <div className="p-fluid">
+              <div className="p-field">
+                <label htmlFor="loginEmail">Email</label>
+                <InputText
+                  id="loginEmail"
+                  name="email"
+                  value={loginData.email}
+                  onChange={handleLoginChange}
+                />
+              </div>
+              <div className="p-field">
+                <label htmlFor="loginPassword">Password</label>
+                <Password
+                  id="loginPassword"
+                  name="password"
+                  value={loginData.password}
+                  onChange={handleLoginChange}
+                />
+              </div>
+              <Button label="Login" onClick={handleLoginSubmit} />
             </div>
-            <div className="p-field">
-              <label htmlFor="loginPassword">Password</label>
-              <Password
-                id="loginPassword"
-                name="password"
-                value={loginData.password}
-                onChange={handleLoginChange}
-              />
+          </TabPanel>
+          <TabPanel header="Sign Up">
+            <div className="p-fluid">
+              <div className="p-field">
+                <label htmlFor="signupEmail">Email</label>
+                <InputText
+                  id="signupEmail"
+                  name="email"
+                  value={signupData.email}
+                  onChange={handleSignupChange}
+                />
+              </div>
+              <div className="p-field">
+                <label htmlFor="signupPassword">Password</label>
+                <Password
+                  id="signupPassword"
+                  name="password"
+                  value={signupData.password}
+                  onChange={handleSignupChange}
+                />
+              </div>
+              <div className="p-field">
+                <label htmlFor="signupConfirmPassword">Confirm Password</label>
+                <Password
+                  id="signupConfirmPassword"
+                  name="confirmPassword"
+                  value={signupData.confirmPassword}
+                  onChange={handleSignupChange}
+                />
+              </div>
+              <Button label="Sign Up" onClick={handleSignupSubmit} />
             </div>
-            <Button label="Login" onClick={handleLoginSubmit} />
-          </div>
-        </TabPanel>
-        <TabPanel header="Sign Up">
-          <div className="p-fluid">
-            <div className="p-field">
-              <label htmlFor="signupEmail">Email</label>
-              <InputText
-                id="signupEmail"
-                name="email"
-                value={signupData.email}
-                onChange={handleSignupChange}
-              />
-            </div>
-            <div className="p-field">
-              <label htmlFor="signupPassword">Password</label>
-              <Password
-                id="signupPassword"
-                name="password"
-                value={signupData.password}
-                onChange={handleSignupChange}
-              />
-            </div>
-            <div className="p-field">
-              <label htmlFor="signupConfirmPassword">Confirm Password</label>
-              <Password
-                id="signupConfirmPassword"
-                name="confirmPassword"
-                value={signupData.confirmPassword}
-                onChange={handleSignupChange}
-              />
-            </div>
-            <Button label="Sign Up" onClick={handleSignupSubmit} />
-          </div>
-        </TabPanel>
-      </TabView>
+          </TabPanel>
+        </TabView>
+      </Card>
     </div>
   );
 };

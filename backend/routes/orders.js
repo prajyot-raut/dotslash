@@ -6,11 +6,28 @@ const Service = require("../models/Service");
 const { isAuthenticated } = require("../middleware/auth");
 const mongoose = require("mongoose");
 
+// Add timer check middleware
+const checkDisputeDeadline = async (order) => {
+  if (order.disputeDeadline && new Date() > new Date(order.disputeDeadline)) {
+    await Order.findByIdAndUpdate(order._id, {
+      $push: {
+        notifications: {
+          message: "Dispute period has expired for this order",
+        },
+      },
+    });
+  }
+};
+
 router.get("/", isAuthenticated, async (req, res) => {
   try {
     const orders = await Order.find({ from: req.user._id }).sort({
       createdAt: -1,
     });
+
+    // Check deadlines for all orders
+    await Promise.all(orders.map(checkDisputeDeadline));
+
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: "Error fetching orders" });
@@ -129,6 +146,28 @@ router.get("/received", isAuthenticated, async (req, res) => {
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: "Error fetching received orders" });
+  }
+});
+
+router.get("/:id", isAuthenticated, async (req, res) => {
+  // ...existing code...
+});
+
+// Add endpoint to get notifications
+router.get("/notifications", isAuthenticated, async (req, res) => {
+  try {
+    const orders = await Order.find({
+      $or: [{ from: req.user._id }, { to: req.user._id }],
+      "notifications.read": false,
+    });
+
+    const notifications = orders.flatMap((order) =>
+      order.notifications.filter((n) => !n.read)
+    );
+
+    res.json(notifications);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching notifications" });
   }
 });
 
