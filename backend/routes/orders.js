@@ -20,9 +20,9 @@ router.get("/", isAuthenticated, async (req, res) => {
 router.post("/:serviceID", isAuthenticated, async (req, res) => {
   try {
     const { serviceID } = req.params;
+    const from = req.user._id;
     const {
       transaction,
-      from,
       productName,
       quantity,
       quotedPrice,
@@ -32,13 +32,15 @@ router.post("/:serviceID", isAuthenticated, async (req, res) => {
       orderStatus,
     } = req.body;
 
+    console.log("Request body:", req.body);
+
     const service = await Service.findById(serviceID);
     if (!service) {
       return res.status(404).json({ message: "Service not found" });
     }
+    console.log("Service:", service);
 
     const order = new Order({
-      transaction,
       from,
       to: service.createdBy,
       productName,
@@ -47,18 +49,23 @@ router.post("/:serviceID", isAuthenticated, async (req, res) => {
       estimatedDeliveryDate,
       extraInfo,
       deadline,
-      paymentStatus,
       orderStatus,
       serviceRef: serviceID,
     });
+    console.log("Order:", order);
 
     await order.save();
 
     // Append the order to the user's orders array
-    await User.findByIdAndUpdate(from, { $push: { orders: order._id } });
+    await User.findByIdAndUpdate(String(from), {
+      $push: { orders: order._id },
+    });
+
+    console.log("Order saved successfully");
 
     res.status(201).json(order);
   } catch (error) {
+    console.error("Order creation error:", error);
     res.status(500).json({ message: "Error creating order" });
   }
 });

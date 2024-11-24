@@ -4,7 +4,6 @@ const orderSchema = new mongoose.Schema({
   transaction: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Transaction",
-    required: true,
   },
   from: {
     type: mongoose.Schema.Types.ObjectId,

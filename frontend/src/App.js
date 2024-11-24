@@ -11,15 +11,18 @@ import {
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import { Menubar } from "primereact/menubar";
-import CreateOrderPage from "./pages/CreateOrder"; // Import the new page
-import ProtectedRoute from "./components/ProtectedRoute"; // Import the ProtectedRoute component
-import Auth from "./pages/Auth"; // Import the Auth component
+import CreateOrderPage from "./pages/CreateOrder";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Auth from "./pages/Auth";
+import AddService from "./pages/AddService";
+import ShowServices from "./pages/showServices";
 import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 import { useState } from "react";
 import axios from "axios";
+import PlaceOrder from "./pages/placeOrder";
 
 // Create an inner component that uses navigation
 function AppContent() {
@@ -58,6 +61,16 @@ function AppContent() {
           </Link>
         ),
       },
+      {
+        label: "Services",
+        icon: "pi pi-list",
+        template: (item, options) => (
+          <Link to="/services" className={options.className}>
+            <span className={options.iconClassName}></span>
+            <span className={options.labelClassName}>{item.label}</span>
+          </Link>
+        ),
+      },
     ];
 
     const authenticatedItems = [
@@ -66,6 +79,16 @@ function AppContent() {
         icon: "pi pi-plus",
         template: (item, options) => (
           <Link to="/create-order" className={options.className}>
+            <span className={options.iconClassName}></span>
+            <span className={options.labelClassName}>{item.label}</span>
+          </Link>
+        ),
+      },
+      {
+        label: "Add Service",
+        icon: "pi pi-plus-circle",
+        template: (item, options) => (
+          <Link to="/add-service" className={options.className}>
             <span className={options.iconClassName}></span>
             <span className={options.labelClassName}>{item.label}</span>
           </Link>
@@ -115,6 +138,24 @@ function AppContent() {
           }
         />
         <Route
+          path="/add-service"
+          element={
+            <ProtectedRoute
+              element={AddService}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route
+          path="/services"
+          element={
+            <ProtectedRoute
+              element={ShowServices}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route
           path="/login"
           element={
             isAuthenticated ? (
@@ -122,6 +163,15 @@ function AppContent() {
             ) : (
               <Auth setIsAuthenticated={setIsAuthenticated} />
             )
+          }
+        />
+        <Route
+          path="/place-order/:serviceId"
+          element={
+            <ProtectedRoute
+              element={PlaceOrder}
+              isAuthenticated={isAuthenticated}
+            />
           }
         />
       </Routes>

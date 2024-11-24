@@ -15,25 +15,53 @@ router.get("/", isAuthenticated, async (req, res) => {
   }
 });
 
+router.get("/:id", isAuthenticated, async (req, res) => {
+  try {
+    const service = await Service.findById(req.params.id);
+    if (!service) {
+      return res.status(404).json({ message: "Service not found" });
+    }
+    res.json(service);
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching service" });
+  }
+});
+
 router.post("/", isAuthenticated, async (req, res) => {
   try {
-    const { name, description } = req.body;
+    console.log("Request body:", req.body);
+    console.log("User:", req.user);
+
+    if (!req.body.name || !req.body.description) {
+      return res
+        .status(400)
+        .json({ message: "Name and description are required" });
+    }
+
     const service = new Service({
-      name,
-      description,
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
       createdBy: req.user._id,
     });
 
-    await service.save();
+    const savedService = await service.save();
+    console.log("Saved service:", savedService);
 
-    // Append the service to the user's services array
-    await User.findByIdAndUpdate(req.user._id, {
-      $push: { services: service._id },
-    });
+    // Update user's services array
+    await User.findByIdAndUpdate(
+      req.user._id,
+      { $push: { services: savedService._id } },
+      { new: true }
+    );
 
-    res.status(201).json(service);
+    res.status(201).json(savedService);
   } catch (error) {
-    res.status(500).json({ message: "Error creating service" });
+    console.error("Service creation error:", error);
+    res.status(500).json({
+      message: "Error creating service",
+      error: error.message,
+    });
   }
 });
 

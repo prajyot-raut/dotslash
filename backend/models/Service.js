@@ -9,32 +9,18 @@ const ServiceSchema = new Schema({
   },
   description: {
     type: String,
-    required: true,
   },
   price: {
-    type: Number,
-    required: true,
-  },
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
+    type: String,
     required: true,
   },
   createdAt: {
     type: Date,
     default: Date.now,
   },
-  category: {
-    type: String,
-    required: true,
-  },
-  availability: {
-    type: Boolean,
-    default: true,
-  },
   ratings: {
-    type: Number,
-    default: 0,
+    type: [Number],
+    default: [0],
   },
   createdBy: {
     type: Schema.Types.ObjectId,

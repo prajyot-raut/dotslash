@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const AuthPage = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [loginData, setLoginData] = useState({ email: "", password: "" });
+  const [loginData, setLoginData] = useState({ email: "c", password: "c" });
   const [signupData, setSignupData] = useState({
     email: "",
     password: "",
@@ -30,7 +30,8 @@ const AuthPage = ({ setIsAuthenticated }) => {
     try {
       const response = await axios.post(
         "http://localhost:3000/auth/login",
-        loginData
+        loginData,
+        { withCredentials: true }
       );
       if (response.data.message === "Login successful") {
         setIsAuthenticated(true);
@@ -45,7 +46,8 @@ const AuthPage = ({ setIsAuthenticated }) => {
     try {
       const response = await axios.post(
         "http://localhost:3000/auth/register",
-        signupData
+        signupData,
+        { withCredentials: true }
       );
       if (response.status === 201) {
         // After successful registration, switch to login tab
