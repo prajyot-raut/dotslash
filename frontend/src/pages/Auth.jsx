@@ -10,7 +10,7 @@ import { useNavigate } from "react-router-dom";
 const AuthPage = ({ setIsAuthenticated }) => {
   const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [loginData, setLoginData] = useState({ email: "c", password: "c" });
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [signupData, setSignupData] = useState({
     email: "",
     password: "",
