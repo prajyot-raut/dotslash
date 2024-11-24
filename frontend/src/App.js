@@ -11,7 +11,6 @@ import {
 import { PrimeReactProvider } from "primereact/api";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import { Menubar } from "primereact/menubar";
-import CreateOrderPage from "./pages/CreateOrder";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Auth from "./pages/Auth";
 import AddService from "./pages/AddService";
@@ -23,6 +22,8 @@ import "primeflex/primeflex.css";
 import { useState } from "react";
 import axios from "axios";
 import PlaceOrder from "./pages/placeOrder";
+import ShowOrders from "./pages/ShowOrders";
+import ShowReceivedOrders from "./pages/ShowReceivedOrders";
 
 // Create an inner component that uses navigation
 function AppContent() {
@@ -75,20 +76,30 @@ function AppContent() {
 
     const authenticatedItems = [
       {
-        label: "Create Order",
-        icon: "pi pi-plus",
+        label: "Add Service",
+        icon: "pi pi-plus-circle",
         template: (item, options) => (
-          <Link to="/create-order" className={options.className}>
+          <Link to="/add-service" className={options.className}>
             <span className={options.iconClassName}></span>
             <span className={options.labelClassName}>{item.label}</span>
           </Link>
         ),
       },
       {
-        label: "Add Service",
-        icon: "pi pi-plus-circle",
+        label: "My Orders",
+        icon: "pi pi-shopping-cart",
         template: (item, options) => (
-          <Link to="/add-service" className={options.className}>
+          <Link to="/orders" className={options.className}>
+            <span className={options.iconClassName}></span>
+            <span className={options.labelClassName}>{item.label}</span>
+          </Link>
+        ),
+      },
+      {
+        label: "Received Orders",
+        icon: "pi pi-inbox",
+        template: (item, options) => (
+          <Link to="/received-orders" className={options.className}>
             <span className={options.iconClassName}></span>
             <span className={options.labelClassName}>{item.label}</span>
           </Link>
@@ -129,15 +140,6 @@ function AppContent() {
           element={<HomePage isAuthenticated={isAuthenticated} />}
         />
         <Route
-          path="/create-order"
-          element={
-            <ProtectedRoute
-              element={CreateOrderPage}
-              isAuthenticated={isAuthenticated}
-            />
-          }
-        />
-        <Route
           path="/add-service"
           element={
             <ProtectedRoute
@@ -170,6 +172,24 @@ function AppContent() {
           element={
             <ProtectedRoute
               element={PlaceOrder}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute
+              element={ShowOrders}
+              isAuthenticated={isAuthenticated}
+            />
+          }
+        />
+        <Route
+          path="/received-orders"
+          element={
+            <ProtectedRoute
+              element={ShowReceivedOrders}
               isAuthenticated={isAuthenticated}
             />
           }
