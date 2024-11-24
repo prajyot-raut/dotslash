@@ -56,10 +56,7 @@ const ShowServices = () => {
             <div className="text-2xl font-bold text-900">{service.name}</div>
             <div className="text-700">{service.description}</div>
             <div className="flex align-items-center gap-2">
-              <div>Span: {Math.round(5 * Math.random())}</div>
-              <span className="text-sm text-500">
-                ({service.ratings?.length || 0} ratings)
-              </span>
+              <div>Credit: {Math.round(5 * Math.random())}</div>
             </div>
             <div className="text-xl font-semibold text-primary">
               Rs. {service.price}

@@ -1,6 +1,0 @@
-const express = require("express");
-const usersRouter = require("./routes/users");
-
-// ...existing middleware...
-
-// ...existing code...

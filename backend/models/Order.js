@@ -76,7 +76,7 @@ const orderSchema = new mongoose.Schema({
     },
     paymentTimer: {
       type: Number,
-      default: 7, // 7 days for payment completion
+      default: 45, // 7 days for payment completion
     },
   },
   notifications: [
