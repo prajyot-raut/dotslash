@@ -1,19 +1,16 @@
-//import { useEffect } from "react";
-import { Link } from "react-router-dom";
-import { Button } from "primereact/button";
+import React from "react";
 
-const HomePage = () => {
+const HomePage = ({ isAuthenticated }) => {
   return (
     <div>
-      <h1>Products</h1>
-      <Link to="/create-order">
-        <Button
-          label="Create Order"
-          icon="pi pi-plus"
-          className="p-button-raised p-button-rounded"
-        />
-      </Link>
+      <h1>Home Page</h1>
+      {isAuthenticated ? (
+        <div>Welcome back! You are logged in.</div>
+      ) : (
+        <div>Welcome! Please log in to access all features.</div>
+      )}
     </div>
   );
 };
+
 export default HomePage;

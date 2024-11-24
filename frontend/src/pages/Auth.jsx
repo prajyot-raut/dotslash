@@ -4,8 +4,10 @@ import { InputText } from "primereact/inputtext";
 import { Password } from "primereact/password";
 import { Button } from "primereact/button";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const AuthPage = () => {
+const AuthPage = ({ setIsAuthenticated }) => {
+  const navigate = useNavigate();
   const [activeIndex, setActiveIndex] = useState(0);
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [signupData, setSignupData] = useState({
@@ -26,8 +28,14 @@ const AuthPage = () => {
 
   const handleLoginSubmit = async () => {
     try {
-      const response = await axios.post("/login", loginData);
-      console.log(response.data);
+      const response = await axios.post(
+        "http://localhost:3000/auth/login",
+        loginData
+      );
+      if (response.data.message === "Login successful") {
+        setIsAuthenticated(true);
+        navigate("/");
+      }
     } catch (error) {
       console.error(error);
     }
@@ -35,8 +43,14 @@ const AuthPage = () => {
 
   const handleSignupSubmit = async () => {
     try {
-      const response = await axios.post("/register", signupData);
-      console.log(response.data);
+      const response = await axios.post(
+        "http://localhost:3000/auth/register",
+        signupData
+      );
+      if (response.status === 201) {
+        // After successful registration, switch to login tab
+        setActiveIndex(0);
+      }
     } catch (error) {
       console.error(error);
     }

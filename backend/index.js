@@ -9,12 +9,14 @@ const Profile = require("./routes/profile");
 const Transactions = require("./routes/transactions");
 const Orders = require("./routes/orders");
 const Services = require("./routes/services");
+const cors = require("cors");
 
 mongoose
   .connect("mongodb://localhost:27017/fxp")
   .then(() => console.log("MongoDB connected"))
   .catch((error) => console.log(error));
 
+app.use(cors());
 app.use(express.json());
 app.use(
   session({

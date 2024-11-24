@@ -11,6 +11,8 @@ router.post("/register", async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "Email already registered" });
     }
+    console.log("Creating user");
+    console.log(email, password, name);
 
     const user = new User({ email, password, name });
     await user.save();
