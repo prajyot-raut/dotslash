@@ -56,18 +56,13 @@ const ShowServices = () => {
             <div className="text-2xl font-bold text-900">{service.name}</div>
             <div className="text-700">{service.description}</div>
             <div className="flex align-items-center gap-2">
-              <Rating
-                value={getAverageRating(service.ratings)}
-                readOnly
-                stars={5}
-                cancel={false}
-              />
+              <div>Span: {Math.round(5 * Math.random())}</div>
               <span className="text-sm text-500">
                 ({service.ratings?.length || 0} ratings)
               </span>
             </div>
             <div className="text-xl font-semibold text-primary">
-              ${service.price}
+              Rs. {service.price}
             </div>
           </div>
         </Card>

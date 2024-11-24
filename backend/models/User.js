@@ -31,14 +31,17 @@ const userSchema = new mongoose.Schema({
       },
       review: {
         type: String,
-        required: true,
       },
       rating: {
         type: Number,
-        required: true,
       },
     },
   ],
+  /* This credit system is temporary as the the data on the website will grow we will add the credit prediction using AI algorithm */
+  credit: {
+    type: Number,
+    default: () => (Math.random() * (3 - 1.5) + 1.5).toFixed(2),
+  },
   services: [
     {
       type: mongoose.Schema.Types.ObjectId,

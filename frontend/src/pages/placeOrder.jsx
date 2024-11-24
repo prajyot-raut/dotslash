@@ -21,6 +21,7 @@ const PlaceOrder = () => {
     deadline: null,
     extraInfo: "",
   });
+  const [sellerInfo, setSellerInfo] = useState(null);
 
   useEffect(() => {
     const fetchService = async () => {
@@ -32,6 +33,14 @@ const PlaceOrder = () => {
           }
         );
         setService(response.data);
+
+        // Fetch seller info including credit score
+        const sellerResponse = await axios.get(
+          `http://localhost:3000/users/${response.data.createdBy}`,
+          { withCredentials: true }
+        );
+        setSellerInfo(sellerResponse.data);
+
         setOrder((prev) => ({
           ...prev,
           productName: response.data.name,
@@ -74,6 +83,16 @@ const PlaceOrder = () => {
     <div className="flex justify-content-center align-items-center min-h-screen bg-blue-50">
       <Toast ref={toast} />
       <Card title="Place Order" className="w-30rem shadow-5">
+        {sellerInfo && (
+          <div className="mb-4 p-3 surface-100 border-round">
+            <h3 className="text-xl mb-2">Seller Information</h3>
+            <div className="flex align-items-center gap-2">
+              <i className="pi pi-star text-yellow-500" />
+              <span className="font-bold">Credit Score:</span>
+              <span>{sellerInfo.creditScore || "N/A"}</span>
+            </div>
+          </div>
+        )}
         <div className="flex flex-column gap-4">
           <div className="flex flex-column gap-2">
             <label htmlFor="productName">Product Name</label>

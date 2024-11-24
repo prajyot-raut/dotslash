@@ -6,13 +6,6 @@ import { Divider } from "primereact/divider";
 import "../index.css";
 
 const HomePage = ({ isAuthenticated }) => {
-  const categories = [
-    { icon: "pi pi-desktop", name: "Digital Services", count: "1.2k+" },
-    { icon: "pi pi-camera", name: "Creative & Design", count: "800+" },
-    { icon: "pi pi-chart-line", name: "Marketing", count: "500+" },
-    { icon: "pi pi-code", name: "Programming", count: "900+" },
-  ];
-
   return (
     <div className="homepage">
       <section className="welcome-section">
@@ -38,22 +31,6 @@ const HomePage = ({ isAuthenticated }) => {
             </div>
           </div>
         </Card>
-      </section>
-
-      <section className="categories-section">
-        <h2>Popular Categories</h2>
-        <Divider />
-        <div className="categories-grid">
-          {categories.map((category, index) => (
-            <Card key={index} className="category-card">
-              <div className="category-content">
-                <i className={`${category.icon} category-icon`}></i>
-                <h3>{category.name}</h3>
-                <Tag value={category.count} severity="info" />
-              </div>
-            </Card>
-          ))}
-        </div>
       </section>
 
       {isAuthenticated ? (

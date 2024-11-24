@@ -17,7 +17,23 @@ const ShowReceivedOrders = () => {
         "http://localhost:3000/orders/received",
         { withCredentials: true }
       );
-      setOrders(response.data);
+
+      // Fetch all buyers' info in parallel
+      const buyersInfo = await Promise.all(
+        response.data.map((order) =>
+          axios.get(`http://localhost:3000/users/${order.from}`, {
+            withCredentials: true,
+          })
+        )
+      );
+
+      // Combine orders with buyer info
+      const ordersWithBuyerInfo = response.data.map((order, index) => ({
+        ...order,
+        buyerInfo: buyersInfo[index].data,
+      }));
+
+      setOrders(ordersWithBuyerInfo);
     } catch (error) {
       console.error("Error fetching received orders:", error);
     }
@@ -145,6 +161,11 @@ const ShowReceivedOrders = () => {
           <div key={order._id} className="col-12 md:col-6 lg:col-4 p-3">
             <Card>
               <div className="text-xl font-bold mb-3">{order.productName}</div>
+              <div className="flex align-items-center gap-2 mb-3">
+                <i className="pi pi-user" />
+                <span className="font-semibold">Buyer Credit Score:</span>
+                <span>{order.buyerInfo?.creditScore || "N/A"}</span>
+              </div>
               <div className="text-base mb-2">
                 <div className="flex justify-content-between mb-2">
                   <span className="font-semibold">Quantity:</span>

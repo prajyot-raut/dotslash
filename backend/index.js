@@ -6,9 +6,9 @@ require("./config/passport");
 const app = express();
 const Auth = require("./routes/auth");
 const Profile = require("./routes/profile");
-const Transactions = require("./routes/transactions");
 const Orders = require("./routes/orders");
 const Services = require("./routes/services");
+const usersRouter = require("./routes/users");
 const cors = require("cors");
 
 mongoose
@@ -44,9 +44,9 @@ app.use((req, res, next) => {
 
 app.use("/auth", Auth);
 app.use("/profile", Profile);
-//app.use("/transactions", Transactions);
 app.use("/orders", Orders);
 app.use("/services", Services);
+app.use("/users", usersRouter);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");

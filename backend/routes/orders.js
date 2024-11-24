@@ -167,9 +167,10 @@ router.put("/:id", isAuthenticated, async (req, res) => {
 
 router.get("/received", isAuthenticated, async (req, res) => {
   try {
-    const orders = await Order.find({ to: req.user._id }).sort({
-      createdAt: -1,
-    });
+    const orders = await Order.find({ to: req.user._id })
+      .sort({ createdAt: -1 })
+      .populate("from", "creditScore")
+      .populate("to", "creditScore");
     res.json(orders);
   } catch (error) {
     res.status(500).json({ message: "Error fetching received orders" });

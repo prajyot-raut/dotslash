@@ -53,17 +53,7 @@ function AppContent() {
         ),
       },
       {
-        label: "Features",
-        icon: "pi pi-star",
-        template: (item, options) => (
-          <Link to="/features" className={options.className}>
-            <span className={options.iconClassName}></span>
-            <span className={options.labelClassName}>{item.label}</span>
-          </Link>
-        ),
-      },
-      {
-        label: "Services",
+        label: "Market Place",
         icon: "pi pi-list",
         template: (item, options) => (
           <Link to="/services" className={options.className}>
@@ -76,7 +66,7 @@ function AppContent() {
 
     const authenticatedItems = [
       {
-        label: "Add Service",
+        label: "Sell things",
         icon: "pi pi-plus-circle",
         template: (item, options) => (
           <Link to="/add-service" className={options.className}>
