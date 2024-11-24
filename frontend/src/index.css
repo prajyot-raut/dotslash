@@ -38,3 +38,100 @@ code {
   background-color: var(--purple-100);
   color: var(--purple-900);
 }
+
+.homepage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.welcome-section {
+  margin-bottom: 3rem;
+}
+
+.welcome-card {
+  background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+  color: white;
+}
+
+.welcome-content {
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.welcome-content h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  opacity: 0.9;
+}
+
+.welcome-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.categories-section {
+  margin-bottom: 3rem;
+}
+
+.categories-section h2 {
+  text-align: center;
+  color: var(--text-color);
+}
+
+.categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.category-card {
+  transition: transform 0.2s;
+  cursor: pointer;
+}
+
+.category-card:hover {
+  transform: translateY(-5px);
+}
+
+.category-content {
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.category-icon {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+}
+
+.action-card,
+.join-card {
+  background: linear-gradient(135deg, #4338ca 0%, #6366f1 100%);
+  color: white;
+  text-align: center;
+  padding: 2rem;
+}
+
+.action-content,
+.join-content {
+  padding: 1rem;
+}
+
+.action-content h2,
+.join-content h2 {
+  margin-bottom: 1rem;
+}
+
+.action-content p,
+.join-content p {
+  margin-bottom: 1.5rem;
+  opacity: 0.9;
+}

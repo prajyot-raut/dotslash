@@ -88,7 +88,7 @@ router.post("/:serviceID", isAuthenticated, async (req, res) => {
 });
 
 router.put("/:id", isAuthenticated, async (req, res) => {
-  const { updateType } = req.body;
+  const { updateType, paymentDetails } = req.body;
   const validUpdateTypes = [
     "order_accepted",
     "order_out_for_delivery",
@@ -96,6 +96,12 @@ router.put("/:id", isAuthenticated, async (req, res) => {
     "payment_initiated",
     "payment_completed",
     "payment_received_by_seller",
+    "dispute_initiated",
+    "dispute_resolved",
+    "refund_initiated",
+    "refund_completed",
+    "payment_done",
+    "payment_verified",
   ];
 
   if (!validUpdateTypes.includes(updateType)) {
@@ -120,12 +126,33 @@ router.put("/:id", isAuthenticated, async (req, res) => {
         break;
       case "payment_initiated":
         order.paymentStatus = "initiated";
+        order.paymentDetails = paymentDetails;
         break;
       case "payment_completed":
         order.paymentStatus = "completed";
+        order.paymentVerifiedAt = new Date();
         break;
       case "payment_received_by_seller":
         order.paymentStatus = "received_by_seller";
+        break;
+      case "dispute_initiated":
+        order.disputeStatus = "initiated";
+        order.disputeDetails = req.body.details;
+        break;
+      case "dispute_resolved":
+        order.disputeStatus = "resolved";
+        break;
+      case "refund_initiated":
+        order.paymentStatus = "refund_pending";
+        break;
+      case "refund_completed":
+        order.paymentStatus = "refunded";
+        break;
+      case "payment_done":
+        order.paymentStatus = "payment_done";
+        break;
+      case "payment_verified":
+        order.paymentStatus = "payment_verified";
         break;
       default:
         return res.status(400).json({ message: "Invalid update type" });
