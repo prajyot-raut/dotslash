@@ -21,7 +21,7 @@ const ShowReceivedOrders = () => {
       // Fetch all buyers' info in parallel
       const buyersInfo = await Promise.all(
         response.data.map((order) =>
-          axios.get(`http://localhost:3000/users/${order.from}`, {
+          axios.get(`http://localhost:3000/users/${order.from._id}`, {
             withCredentials: true,
           })
         )
