@@ -36,6 +36,7 @@ const AuthPage = ({ setIsAuthenticated }) => {
       );
       if (response.data.message === "Login successful") {
         setIsAuthenticated(true);
+        localStorage.setItem("authToken", response.data.token);
         navigate("/");
       }
     } catch (error) {

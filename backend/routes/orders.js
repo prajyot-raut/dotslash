@@ -4,7 +4,6 @@ const Order = require("../models/Order");
 const User = require("../models/User");
 const Service = require("../models/Service");
 const { isAuthenticated } = require("../middleware/auth");
-const mongoose = require("mongoose");
 
 // Add timer check middleware
 const checkDisputeDeadline = async (order) => {

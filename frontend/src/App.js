@@ -19,7 +19,7 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import PlaceOrder from "./pages/placeOrder";
 import ShowOrders from "./pages/ShowOrders";
@@ -30,10 +30,18 @@ function AppContent() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
   const handleLogout = async () => {
     try {
       await axios.post("http://localhost:3000/auth/logout");
       setIsAuthenticated(false);
+      localStorage.removeItem("authToken");
       navigate("/login");
     } catch (error) {
       console.error("Logout failed:", error);

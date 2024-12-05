@@ -24,7 +24,8 @@ router.post("/register", async (req, res) => {
 });
 
 router.post("/login", passport.authenticate("local"), (req, res) => {
-  res.json({ message: "Login successful" });
+  const token = req.user.generateAuthToken(); // Assuming you have a method to generate a token
+  res.json({ message: "Login successful", token });
 });
 
 router.post("/logout", (req, res) => {
